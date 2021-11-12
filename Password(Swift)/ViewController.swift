@@ -13,21 +13,21 @@ class ViewController: UIViewController {
     var fuck : ZSPasswordView?
     
     lazy var button : UIButton = {
-        let tempButton : UIButton = UIButton.init(type: UIButtonType.System)
-        tempButton.frame = CGRectMake(UIScreen.mainScreen().bounds.size.width * 0.5 * 0.5, 300 , UIScreen.mainScreen().bounds.size.width * 0.5 , 30)
-        tempButton.setTitle("确定", forState: UIControlState.Normal)
-        tempButton.addTarget(self, action: "click:", forControlEvents: UIControlEvents.TouchUpInside)
+        let tempButton : UIButton = UIButton.init(type: .system)
+        tempButton.frame = CGRect.init(x: UIScreen.main.bounds.size.width * 0.5 * 0.5, y: 300, width: UIScreen.main.bounds.size.width * 0.5, height: 30)
+        tempButton.setTitle("确定", for: .normal)
+        tempButton.addTarget(self, action: #selector(click(sender:)), for: .touchUpInside)
         return tempButton
     }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        fuck = ZSPasswordView.init(frame: CGRectMake(10, 200, UIScreen.mainScreen().bounds.size.width - 20, 35))
+        fuck = ZSPasswordView.init(frame: CGRect.init(x: 10, y: 200, width: UIScreen.main.bounds.size.width - 20, height: 35))
         self.view.addSubview(fuck!)
         self.view.addSubview(self.button)
     }
     
-    func click(sender:UIButton) {
+    @objc func click(sender:UIButton) {
         print((fuck?.textFiledString)!)
     }
 

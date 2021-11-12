@@ -13,9 +13,9 @@ class ZSPasswordView: UIView,UITextFieldDelegate {
     static let space : CGFloat = 10
     let space : CGFloat = 10
     
-    var textFiledString : NSString {
+    var textFiledString : String {
         get{
-            return self.textFiled.text!
+            return self.textFiled.text ?? ""
         }
     }
     
@@ -27,24 +27,24 @@ class ZSPasswordView: UIView,UITextFieldDelegate {
         set{
             _frame = newValue
             super.frame = _frame!
-            self.createUI(_frame!)
+            self.createUI(frame: _frame!)
         }
     }
     
     lazy var textFiled:UITextField = {
         let tempTextFiled : UITextField = UITextField.init()
-        tempTextFiled.backgroundColor = UIColor.whiteColor()
+        tempTextFiled.backgroundColor = UIColor.white
         tempTextFiled.layer.masksToBounds = true
-        tempTextFiled.layer.borderColor = UIColor.grayColor().CGColor
+        tempTextFiled.layer.borderColor = UIColor.gray.cgColor
         tempTextFiled.layer.borderWidth = 1
         tempTextFiled.layer.cornerRadius = space * 0.5
-        tempTextFiled.secureTextEntry = true
+        tempTextFiled.isSecureTextEntry = true
         tempTextFiled.delegate = self
-        tempTextFiled.tintColor = UIColor.clearColor()
-        tempTextFiled.textColor = UIColor.clearColor()
-        tempTextFiled.font = UIFont.systemFontOfSize(30)
-        tempTextFiled.keyboardType = UIKeyboardType.NumberPad
-        tempTextFiled.addTarget(self, action: "textFiledEdingChanged", forControlEvents: UIControlEvents.EditingChanged)
+        tempTextFiled.tintColor = .clear
+        tempTextFiled.textColor = .clear
+        tempTextFiled.font = UIFont.systemFont(ofSize: 30)
+        tempTextFiled.keyboardType = .numberPad
+        tempTextFiled.addTarget(self, action: #selector(textFiledEdingChanged), for: .editingChanged)
         return tempTextFiled
     }()
     
@@ -55,27 +55,27 @@ class ZSPasswordView: UIView,UITextFieldDelegate {
         return true
     }
     
-    func textFiledEdingChanged() {
-        let length : NSInteger = (self.textFiled.text?.characters.count)!
-        for var i : NSInteger = 0; i < passwordLength; i++ {
+    @objc func textFiledEdingChanged() {
+        let length : NSInteger = (self.textFiled.text ?? "").count
+        for i in 0..<passwordLength {
             let dotLabel : UILabel? = (self.viewWithTag(i + 1) as! UILabel)
             if(dotLabel != nil){
                 self.bringSubviewToFront(dotLabel!)
-                dotLabel!.hidden = length <= i
+                dotLabel!.isHidden = length <= i
             }
         }
-        self.textFiled.sendActionsForControlEvents(UIControlEvents.ValueChanged)
+        self.textFiled.sendActions(for: .valueChanged)
     }
     
     func createUI(frame:CGRect){
         self.addSubview(self.textFiled)
-        self.textFiled.frame = CGRectMake(0,0,self.frame.size.width,self.frame.size.height)
+        self.textFiled.frame = CGRect.init(x: 0, y: 0, width: self.frame.size.width, height: self.frame.size.height)
         let perWidth:CGFloat = (frame.size.width - (CGFloat)(passwordLength) + 1) / CGFloat(passwordLength)
-        for var i:Int = 0; i < passwordLength; i++ {
+        for i in 0..<passwordLength {
             if (i < passwordLength - 1){
                 let lineLabel:UILabel = UILabel.init()
-                lineLabel.backgroundColor = UIColor.lightGrayColor()
-                lineLabel.frame = CGRectMake(CGFloat(i + 1) * frame.size.width / CGFloat (passwordLength) + 1, 0, 1, frame.height)
+                lineLabel.backgroundColor = UIColor.lightGray
+                lineLabel.frame = CGRect.init(x: CGFloat(i + 1) * frame.size.width / CGFloat (passwordLength) + 1, y: 0, width: 1, height: frame.height)
                 self.addSubview(lineLabel)
             }
             
@@ -85,11 +85,11 @@ class ZSPasswordView: UIView,UITextFieldDelegate {
                 dotLabel!.tag = i + 1
                 self.addSubview(dotLabel!)
             }
-            dotLabel?.frame = CGRectMake((perWidth + 1) * CGFloat (i) + (perWidth - space) * 0.5, (frame.size.height - space) * 0.5, space, space)
+            dotLabel?.frame = CGRect.init(x: (perWidth + 1) * CGFloat (i) + (perWidth - space) * 0.5, y: (frame.size.height - space) * 0.5, width: space, height: space)
             dotLabel?.layer.masksToBounds = true
             dotLabel?.layer.cornerRadius = space * 0.5
-            dotLabel?.backgroundColor = UIColor.blackColor()
-            dotLabel?.hidden = true
+            dotLabel?.backgroundColor = UIColor.black
+            dotLabel?.isHidden = true
         }
     }
 }
